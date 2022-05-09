@@ -1,0 +1,24 @@
+.navbar {
+  background-color: #101820ff;
+  color: #fee715ff;
+  min-height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 1.5rem;
+}
+.navbar > div:first-child {
+  font-size: 2rem;
+}
+.navbar > div:nth-child(2) {
+  display: flex;
+}
+.custom-button-inverted {
+  font-weight: 500;
+  background-color: #fee715ff;
+  color: #101820ff;
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}

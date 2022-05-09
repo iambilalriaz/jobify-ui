@@ -1,0 +1,45 @@
+.job-card {
+  width: 80%;
+  margin: auto;
+  margin-block: 1rem;
+  border-radius: 1rem !important;
+}
+.job-card-header,
+.job-card-body {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+.job-card-header {
+  background-color: #101820ff !important;
+  color: #fee715ff;
+  font-size: 1.25rem;
+  font-weight: 300;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.featured-text {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1rem;
+}
+.job-info > div:first-child {
+  color: #101820ff;
+  font-weight: 500;
+  font-size: 1.15rem;
+}
+.job-info > div:nth-child(2) {
+  color: #101820ff;
+}
+.job-info {
+  margin-bottom: 1rem;
+}
+.job-info:first-child {
+  text-align: left;
+  max-width: 50%;
+}
+.job-info:nth-child(2) {
+  text-align: right;
+  max-width: 50%;
+}
