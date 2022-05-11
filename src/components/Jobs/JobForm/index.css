@@ -1,0 +1,35 @@
+.job-form-card {
+  width: 90%;
+  margin: 4rem;
+}
+.job-form-card .container {
+  margin-left: unset;
+}
+.job-form-layout {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    90deg,
+    #fee715ff 0%,
+    #fee715ff 20%,
+    #101820ff 100%
+  );
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+}
+.job-form-layout .auth-card {
+  width: 80%;
+  margin-block: 1.5rem;
+  border-radius: 1rem;
+  font-family: 'Fira Sans';
+  position: relative;
+}
+.update-job-buttons {
+  display: flex;
+  padding-left: 0.65rem;
+}
+.update-job-buttons > button:nth-child(2) {
+  margin-left: 1rem;
+  color: #101820ff;
+  background-color: #fff;
+}

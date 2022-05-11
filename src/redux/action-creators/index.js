@@ -3,6 +3,7 @@ import {
   SET_DISPLAY_NAME,
   SET_PASSWORD,
   SET_APP_USER,
+  SET_JOBS,
 } from '../action-types/index';
 export const setEmail = (payload) => ({
   type: SET_EMAIL,
@@ -18,5 +19,9 @@ export const setPassword = (payload) => ({
 });
 export const setAppUser = (payload) => ({
   type: SET_APP_USER,
+  payload,
+});
+export const setJobs = (payload) => ({
+  type: SET_JOBS,
   payload,
 });

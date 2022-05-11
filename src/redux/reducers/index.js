@@ -1,5 +1,6 @@
 import {
   SET_APP_USER,
+  SET_JOBS,
   SET_DISPLAY_NAME,
   SET_EMAIL,
   SET_PASSWORD,
@@ -12,8 +13,9 @@ const initialState = {
   displayName: '',
   password: '',
   appUser: null,
+  jobs: [],
 };
-const authReducer = (state = initialState, { type, payload }) => {
+const appReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case SET_EMAIL: {
       return { ...state, email: payload };
@@ -27,11 +29,13 @@ const authReducer = (state = initialState, { type, payload }) => {
     case SET_APP_USER: {
       return { ...state, appUser: payload };
     }
-
+    case SET_JOBS: {
+      return { ...state, jobs: payload };
+    }
     default:
       return state;
   }
 };
 export const rootReducer = combineReducers({
-  auth: authReducer,
+  app: appReducer,
 });

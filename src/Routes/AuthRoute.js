@@ -10,7 +10,7 @@ const AuthRoute = () => {
   return loggedIn === false ? (
     <Outlet />
   ) : loggedIn === true ? (
-    <Navigate replace to='/dashboard' />
+    <Navigate replace to='/jobs' />
   ) : (
     ''
   );

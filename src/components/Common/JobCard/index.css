@@ -10,13 +10,34 @@
   border-top-right-radius: 1rem !important;
 }
 .job-card-header {
-  background-color: #101820ff !important;
-  color: #fee715ff;
   font-size: 1.25rem;
   font-weight: 300;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.featured-header {
+  background-color: #101820ff !important;
+  color: #fee715ff;
+}
+.non-featured-header {
+  color: #101820ff;
+}
+.job-card-header svg {
+  margin-left: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.job-info:first-child > div:nth-child(2) {
+  display: flex;
+  align-items: center;
+}
+.company-logo {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #fee715ff;
+  border-radius: 50%;
+  margin-right: 0.5rem;
 }
 .featured-text {
   text-transform: uppercase;

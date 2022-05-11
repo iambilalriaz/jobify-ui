@@ -13,7 +13,7 @@ import {
 } from '../../redux/action-creators/index';
 import { getErrorMessage } from '../../utils/helpers/index';
 const Login = () => {
-  const { email, password } = useSelector((state) => state?.auth);
+  const { email, password } = useSelector((state) => state?.app);
   const [didLoginBtnClick, setDidLoginBtnClick] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
@@ -38,7 +38,7 @@ const Login = () => {
           );
           setIsLoggingIn(false);
           toast.success('Login successful.');
-          navigate('/dashboard');
+          navigate('/jobs');
         })
         .catch((error) => {
           setIsLoggingIn(false);

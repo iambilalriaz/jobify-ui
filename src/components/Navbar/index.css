@@ -9,9 +9,16 @@
 }
 .navbar > div:first-child {
   font-size: 2rem;
+  cursor: pointer;
 }
 .navbar > div:nth-child(2) {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+}
+.navbar > div:nth-child(2) > div {
+  padding-inline-start: 3rem;
 }
 .custom-button-inverted {
   font-weight: 500;
@@ -21,4 +28,34 @@
   border-radius: 0.5rem;
   cursor: pointer;
   font-size: 0.8rem;
+  text-align: center;
+}
+.logout-buttons span:nth-child(2) {
+  background-color: #101820ff;
+  color: #fee715ff;
+  border-radius: 0.5rem;
+  padding: 0.35rem 1.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-left: 1.5rem;
+}
+.logout-buttons span:nth-child(1) {
+  border: 1px solid #101820ff;
+  color: #101820ff;
+
+  /* color: #fee715ff; */
+  border-radius: 0.5rem;
+  padding: 0.35rem 1.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.logout-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.not-selected-page-link {
+  color: #fff !important;
+}
+.selected-page-link {
+  font-weight: 500 !important;
 }

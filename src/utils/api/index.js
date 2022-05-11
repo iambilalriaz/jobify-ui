@@ -22,3 +22,57 @@ export const userLogin = ({ email, password }) =>
       password,
     },
   });
+export const postJob = (formData) =>
+  request({
+    method: 'POST',
+    url: `${API_URL}/job`,
+    headers: getHeaders(getJWT()),
+    data: formData,
+  });
+export const updateJob = (formData, jobId) =>
+  request({
+    method: 'PATCH',
+    url: `${API_URL}/job/${jobId}`,
+    headers: getHeaders(getJWT()),
+    data: formData,
+  });
+export const getApprovedJobs = () =>
+  request({
+    method: 'GET',
+    url: `${API_URL}/job/approved`,
+  });
+export const getPendingJobs = () =>
+  request({
+    method: 'GET',
+    url: `${API_URL}/job/pending`,
+    headers: getHeaders(getJWT()),
+  });
+export const getFeaturedJobs = () =>
+  request({
+    method: 'GET',
+    url: `${API_URL}/job/featured`,
+  });
+export const approveJob = (jobId) =>
+  request({
+    method: 'PATCH',
+    url: `${API_URL}/job/${jobId}/approve`,
+    headers: getHeaders(getJWT()),
+  });
+export const markJobAsFeatured = (jobId) =>
+  request({
+    method: 'PATCH',
+    url: `${API_URL}/job/${jobId}/featured`,
+    headers: getHeaders(getJWT()),
+  });
+export const getJobInfo = (jobId) =>
+  request({
+    method: 'GET',
+    url: `${API_URL}/job/${jobId}`,
+    headers: getHeaders(getJWT()),
+  });
+export const deleteJob = (jobId) =>
+  request({
+    method: 'DELETE',
+    url: `${API_URL}/job/${jobId}`,
+    headers: getHeaders(getJWT()),
+  });
