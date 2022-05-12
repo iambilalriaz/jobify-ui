@@ -5,7 +5,7 @@ import { setJobs } from '../../../../redux/action-creators';
 import { getApprovedJobs, getPendingJobs } from '../../../../utils/api';
 import JobCard from '../../../Common/JobCard/JobCard';
 
-const Jobs = ({ loggedIn }) => {
+const Jobs = ({ loggedIn, setFeaturedJobs }) => {
   const jobs = useSelector((state) => state?.app?.jobs);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -33,7 +33,11 @@ const Jobs = ({ loggedIn }) => {
     <div>
       <div className='featured-section'>
         {jobs?.map((job) => (
-          <JobCard job={job} loggedIn={loggedIn} />
+          <JobCard
+            job={job}
+            loggedIn={loggedIn}
+            setFeaturedJobs={setFeaturedJobs}
+          />
         ))}
       </div>
     </div>

@@ -1,27 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import JobCard from '../../../Common/JobCard/JobCard';
 import { getFeaturedJobs } from '../../../../utils/api';
-const Featured = ({ loggedIn }) => {
-  const [jobs, setJobs] = useState([]);
+const Featured = ({ loggedIn, featuredJobs, setFeaturedJobs }) => {
   useEffect(() => {
     getFeaturedJobs()
       .then(({ data }) => {
-        setJobs(data ?? []);
+        setFeaturedJobs(data ?? []);
       })
       .catch(() => {
-        setJobs([]);
+        setFeaturedJobs([]);
       });
-  }, []);
+  }, [setFeaturedJobs]);
   return (
     <>
       <div className='featured-jobs'>Featured Jobs</div>
       <div className='featured'>
-        {jobs?.map((job) => (
-          <JobCard job={job} setFeaturedJobs={setJobs} loggedIn={loggedIn} />
+        {featuredJobs?.map((job) => (
+          <JobCard
+            job={job}
+            setFeaturedJobs={setFeaturedJobs}
+            loggedIn={loggedIn}
+          />
         ))}
       </div>
-      {jobs?.length > 0 && <hr className='jobs-separator' />}
+      {featuredJobs?.length > 0 && <hr className='jobs-separator' />}
     </>
   );
 };

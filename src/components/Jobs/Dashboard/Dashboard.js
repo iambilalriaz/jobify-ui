@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Featured from './Featured/Featured';
 import Header from './Header/Header';
 import './index.css';
@@ -8,6 +8,8 @@ import { useLocation } from 'react-router-dom';
 
 const Dashboard = ({ loggedIn }) => {
   const { pathname } = useLocation();
+  const [featuredJobs, setFeaturedJobs] = useState([]);
+
   return (
     <div className='dashboard'>
       {!pathname?.includes('post') && !pathname?.includes('update') && (
@@ -15,11 +17,17 @@ const Dashboard = ({ loggedIn }) => {
       )}
       {!pathname?.includes('pending') &&
         !pathname?.includes('post') &&
-        !pathname?.includes('update') && <Featured loggedIn={loggedIn} />}
+        !pathname?.includes('update') && (
+          <Featured
+            loggedIn={loggedIn}
+            featuredJobs={featuredJobs}
+            setFeaturedJobs={setFeaturedJobs}
+          />
+        )}
       {pathname?.includes('post') || pathname?.includes('update') ? (
         <JobForm />
       ) : (
-        <Jobs loggedIn={loggedIn} />
+        <Jobs loggedIn={loggedIn} setFeaturedJobs={setFeaturedJobs} />
       )}
     </div>
   );

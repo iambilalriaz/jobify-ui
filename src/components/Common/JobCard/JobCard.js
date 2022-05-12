@@ -29,6 +29,8 @@ const JobCard = ({
     is_featured,
     is_approved,
     company_logo,
+    description,
+    category,
   },
   setFeaturedJobs,
   loggedIn,
@@ -73,9 +75,8 @@ const JobCard = ({
         toast.error(getErrorMessage(error));
       });
   };
-  const selectJob = () => {
-    navigate(`/update?job=${_id}`);
-  };
+  const selectJob = () => navigate(`/update?job=${_id}`);
+
   const onDeleteJob = () => {
     deleteJob(_id)
       .then((response) => {
@@ -88,7 +89,7 @@ const JobCard = ({
   };
   return (
     <Card className='job-card'>
-      <Card.Header
+      {/* <Card.Header
         className={`job-card-header ${
           is_featured ? '' : 'non-'
         }featured-header`}
@@ -122,11 +123,10 @@ const JobCard = ({
             </>
           )}
         </div>
-      </Card.Header>
+      </Card.Header> */}
       <Card.Body className='job-card-body'>
         <div className='d-flex justify-content-apart'>
-          <div className='job-info'>
-            <div>Company Name</div>
+          <div className='d-flex justify-content-center align-items-center'>
             <div>
               <img
                 className='company-logo'
@@ -134,41 +134,66 @@ const JobCard = ({
                 defer
                 alt='logo'
               />
-              {company_name}
             </div>
+            <div className='company-name'>{company_name}</div>
           </div>
-          <div className='job-info'>
-            <div>Salary</div>
-            <div>{salary}</div>
-          </div>
-        </div>
-        <div className='d-flex justify-content-apart'>
-          <div className='job-info'>
-            <div>Type</div>
-            <div>{type}</div>
-          </div>
-          <div className='job-info'>
-            <div>Location</div>
-            <div>
-              {city && country ? (
-                <>
-                  {city}
-                  {`${city && country ? ',' : ''}`} {country}
-                </>
-              ) : (
-                '-'
+
+          <div>
+            <div className='job-info'>
+              <div>{title}</div>
+            </div>
+            <div className='middle-info d-flex align-items-center'>
+              <div className='middle-icons'>
+                <i className='fa fa-briefcase' />
+                {category || 'Engineering'}
+              </div>
+              {city && country && (
+                <div className='middle-icons'>
+                  {city && country ? (
+                    <>
+                      <i className='fa fa-map-marker-alt' />
+                      {city}
+                      {`${city && country ? ',' : ''}`} {country}
+                    </>
+                  ) : (
+                    ''
+                  )}
+                </div>
               )}
+              <div className='middle-icons'>
+                <i className='far fa-calendar-alt' />
+                {moment(createdAt).format('MMM DD, YYYY')}
+              </div>
             </div>
+            <div className='description'>{description}</div>
           </div>
-        </div>
-        <div className='d-flex justify-content-apart'>
-          <div className='job-info'>
-            <div>Skills</div>
-            <div>{skills}</div>
-          </div>
-          <div className='job-info'>
-            <div>Date Posted</div>
-            <div>{moment(createdAt).format('L')}</div>
+          <div className='action-icons d-flex justify-content-apart'>
+            {is_approved ? (
+              <i
+                className={`feature-icon fa${
+                  is_featured ? 's featured-icon' : 'r'
+                } fa-bookmark fa-lg`}
+                onClick={
+                  !is_featured && loggedIn === true ? markFeatured : () => {}
+                }
+              />
+            ) : !is_approved && loggedIn === true ? (
+              <div onClick={onApproveJob}>
+                <span className='approve-job-icon fa fa-check fa-lg' />
+              </div>
+            ) : (
+              ''
+            )}
+            {loggedIn === true && (
+              <>
+                <div onClick={selectJob}>
+                  <span className='edit-job-icon fa fa-pencil-alt fa-lg' />
+                </div>
+                <div onClick={onDeleteJob}>
+                  <span className='delete-job-icon fa fa-trash-alt fa-lg' />{' '}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Card.Body>
