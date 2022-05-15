@@ -1,8 +1,7 @@
 import { validate } from 'email-validator';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import './index.css';
@@ -11,10 +10,13 @@ import {
   getCountries,
   getErrorMessage,
   getSuccessMessage,
+  getCategories,
 } from '../../../utils/helpers/index';
 import { getJobInfo, postJob, updateJob } from '../../../utils/api';
 const JobForm = () => {
+  // eslint-disable-next-line no-unused-vars
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const [didPostBtnClick, setDidPostBtnClick] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
@@ -26,6 +28,7 @@ const JobForm = () => {
     description: '',
     skills: '',
     country: '',
+    category: '',
     city: '',
     companyName: '',
     companyWebsite: '',
@@ -33,6 +36,7 @@ const JobForm = () => {
     companyRepEmail: '',
     companyRepName: '',
     externalLink: '',
+    expiresIn: 3,
   });
 
   const setValue = ({ key, value }) => {
@@ -58,8 +62,8 @@ const JobForm = () => {
       skills,
       country,
       companyName,
-      companyWebsite,
       companyLogo,
+      companyWebsite,
       companyRepEmail,
       companyRepName,
     } = jobDetails;
@@ -73,17 +77,16 @@ const JobForm = () => {
       country &&
       companyName &&
       companyWebsite &&
-      companyLogo &&
       validate(companyRepEmail) &&
       companyRepName
     ) {
       const formData = new FormData();
 
-      const request = JSON.stringify(
-        actionType === 'update' ? { ...jobDetails, isFeatured } : jobDetails
-      );
+      const request = JSON.stringify({ ...jobDetails, isFeatured });
       formData.append('job', request);
-      formData.append('companyLogo', jobDetails?.companyLogo);
+      if (companyLogo) {
+        formData.append('companyLogo', companyLogo);
+      }
 
       if (actionType === 'post') {
         postJob(formData)
@@ -116,6 +119,7 @@ const JobForm = () => {
             description: data?.description,
             skills: data?.skills,
             country: data?.country,
+            category: data?.category,
             city: data?.city || '',
             companyName: data?.company_name,
             companyWebsite: data?.company_website,
@@ -176,6 +180,7 @@ const JobForm = () => {
                     </option>
                     <option value='full-time'>Full Time</option>
                     <option value='part-time'>Part Time</option>
+                    <option value='contract'>Contract</option>
                     <option value='remote'>Remote</option>
                   </Form.Select>
                   {didPostBtnClick && !jobDetails?.type && (
@@ -262,7 +267,32 @@ const JobForm = () => {
               </Col>
             </Row>
             <Row>
-              <Col sm='6'>
+              <Col sm='4'>
+                <Form.Group className='mb-3' controlId='formBasicEmail'>
+                  <Form.Label>Category</Form.Label>
+                  <Form.Select
+                    className='text-input'
+                    value={jobDetails?.category}
+                    onChange={(e) => {
+                      setValue({
+                        key: 'category',
+                        value: e?.target?.value,
+                      });
+                    }}
+                  >
+                    <option disabled value=''>
+                      -- Select Category --
+                    </option>
+                    {getCategories()?.map((category) => (
+                      <option value={category}>{category}</option>
+                    ))}
+                  </Form.Select>
+                  {didPostBtnClick && !jobDetails?.category && (
+                    <div className='auth-error'>Please select category</div>
+                  )}
+                </Form.Group>
+              </Col>
+              <Col sm='4'>
                 <Form.Group className='mb-3' controlId='formBasicEmail'>
                   <Form.Label>Country</Form.Label>
                   <Form.Select
@@ -273,11 +303,12 @@ const JobForm = () => {
                         key: 'country',
                         value: e?.target?.value,
                       });
-                      getCities(e?.target?.value).then((cs) => {
-                        setCities(cs);
+                      startTransition(() => {
+                        getCities(e?.target?.value).then((cs) => {
+                          setCities(cs);
+                        });
                       });
                     }}
-                    onKeyDown={handleEnterPress}
                   >
                     <option disabled value=''>
                       -- Select Country --
@@ -291,26 +322,32 @@ const JobForm = () => {
                   )}
                 </Form.Group>
               </Col>
-              <Col sm='6'>
+              <Col sm='4'>
                 <Form.Group className='mb-3' controlId='formBasicEmail'>
                   <Form.Label>City</Form.Label>
                   <Form.Select
                     className='text-input'
                     value={jobDetails?.city}
+                    disabled={isPending}
                     onChange={(e) =>
                       setValue({
                         key: 'city',
                         value: e?.target?.value,
                       })
                     }
-                    onKeyDown={handleEnterPress}
                   >
-                    <option disabled value=''>
-                      -- Select City --
-                    </option>
-                    {cities?.map((city) => (
-                      <option value={city}>{city}</option>
-                    ))}
+                    {isPending ? (
+                      <option selected>Fetching cities...</option>
+                    ) : (
+                      <>
+                        <option disabled value=''>
+                          -- City --
+                        </option>
+                        {cities?.map((city) => (
+                          <option value={city}>{city}</option>
+                        ))}
+                      </>
+                    )}
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -374,9 +411,6 @@ const JobForm = () => {
                       })
                     }
                   />
-                  {didPostBtnClick && !jobDetails?.companyLogo && (
-                    <div className='auth-error'>Please select company logo</div>
-                  )}
                 </Form.Group>
               </Col>
             </Row>
@@ -448,23 +482,48 @@ const JobForm = () => {
                 </Form.Group>
               </Col>
             </Row>
-            {searchParams.get('job') && (
+            {!searchParams.get('job') && (
               <Row>
                 <Col sm='6'>
-                  <Form.Group className='mb-3' controlId='frfe'>
-                    <Form.Check
+                  <Form.Group className='mb-3' controlId='formBasicEmail'>
+                    <Form.Label>Expires in</Form.Label>
+                    <Form.Select
                       className='text-input'
-                      label='Is featured?'
-                      checked={isFeatured}
-                      onClick={(e) => {
-                        setIsFeatured((prevChecked) => !prevChecked);
+                      value={jobDetails?.expiresIn}
+                      onChange={(e) => {
+                        setValue({
+                          key: 'expiresIn',
+                          value: parseInt(e?.target?.value),
+                        });
                       }}
-                    />
+                    >
+                      <option disabled value=''>
+                        -- Select Expiration Tenure --
+                      </option>
+                      <option value='3'>3 months</option>
+                      <option value='6'>6 months</option>
+                      <option value='12'>1 year</option>
+                    </Form.Select>
                   </Form.Group>
                 </Col>
                 <Col sm='6'></Col>
               </Row>
             )}
+            <Row>
+              <Col sm='6'>
+                <Form.Group className='mb-3' controlId='frfe'>
+                  <Form.Check
+                    className='text-input'
+                    label='Mark as featured'
+                    checked={isFeatured}
+                    onClick={() => {
+                      setIsFeatured((prevChecked) => !prevChecked);
+                    }}
+                  />
+                </Form.Group>
+              </Col>
+              <Col sm='6'></Col>
+            </Row>
           </Container>
 
           {searchParams.get('job') ? (

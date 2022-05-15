@@ -1,0 +1,41 @@
+.jobs-table {
+  margin-inline: auto;
+  margin-block: 1rem;
+  width: 95%;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 6px;
+}
+.jobs-table table th:first-child {
+  width: 18%;
+}
+.jobs-table table th:nth-child(2) {
+  width: 10%;
+}
+.jobs-table table th:nth-child(3) {
+  width: 13%;
+}
+.jobs-table table th:nth-child(4) {
+  width: 13%;
+}
+.jobs-table table th:nth-child(5) {
+  width: 8.5%;
+}
+.jobs-table table th:nth-child(6) {
+  width: 8.5%;
+}
+.jobs-table table th:nth-child(7) {
+  width: 12%;
+}
+.jobs-table table th:nth-child(8) {
+  width: 12%;
+}
+.jobs-table table th:nth-child(9) {
+  width: 7%;
+}
+.jobs-table th,
+.jobs-table td {
+  padding: 1.25rem;
+}
+.jobs-table th {
+  background-color: aliceblue;
+}

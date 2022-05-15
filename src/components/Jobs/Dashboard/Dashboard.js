@@ -5,17 +5,31 @@ import './index.css';
 import Jobs from './Jobs/Jobs';
 import JobForm from '../JobForm/JobForm';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Dashboard = ({ loggedIn }) => {
   const { pathname } = useLocation();
   const [featuredJobs, setFeaturedJobs] = useState([]);
-
+  const {
+    keywordFilter,
+    typeFilter,
+    categoryFilter,
+    countryFilter,
+    cityFilter,
+  } = useSelector((state) => state?.app);
+  const isNotFiltering = () =>
+    !keywordFilter &&
+    !countryFilter &&
+    !categoryFilter &&
+    !cityFilter &&
+    !Object.values(typeFilter)?.includes(true);
   return (
     <div className='dashboard'>
       {!pathname?.includes('post') && !pathname?.includes('update') && (
         <Header />
       )}
-      {!pathname?.includes('pending') &&
+      {isNotFiltering() &&
+        !pathname?.includes('pending') &&
         !pathname?.includes('post') &&
         !pathname?.includes('update') && (
           <Featured

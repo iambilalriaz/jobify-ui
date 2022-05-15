@@ -6,3 +6,16 @@ export const getErrorMessage = (error) =>
 export const getCountries = () => Object.keys(locations);
 export const getCities = async (country) =>
   await [...new Set(locations?.[country])];
+export const getCategories = () => [
+  'Business',
+  'Management',
+  'Finance',
+  'Technical Writing',
+  'Marketing',
+  'Security',
+  'Executive',
+  'Human Resources',
+  'User Experience',
+  'Customer Service',
+  'Other',
+];

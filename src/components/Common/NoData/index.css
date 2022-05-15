@@ -1,0 +1,8 @@
+.no-jobs-found {
+  color: rgb(183, 183, 183);
+  font-style: italic;
+  text-align: center;
+  padding-block: 20%;
+  font-size: 1.25rem;
+  font-weight: 300;
+}

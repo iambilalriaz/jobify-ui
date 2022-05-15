@@ -76,3 +76,9 @@ export const deleteJob = (jobId) =>
     url: `${API_URL}/job/${jobId}`,
     headers: getHeaders(getJWT()),
   });
+export const extendJobExpiration = (jobId) =>
+  request({
+    method: 'PATCH',
+    url: `${API_URL}/job/${jobId}/extend`,
+    headers: getHeaders(getJWT()),
+  });

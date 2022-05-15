@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -13,16 +13,14 @@ import {
 } from '../../../utils/api';
 import { getErrorMessage, getSuccessMessage } from '../../../utils/helpers';
 import './index.css';
-import { setJobs } from '../../../redux/action-creators/index';
+import { setFilteredJobs, setJobs } from '../../../redux/action-creators/index';
 import { useDispatch } from 'react-redux';
-const JobCard = ({
-  job: {
+import JobDetails from '../JobDetails/JobDetails';
+const JobCard = ({ job, setFeaturedJobs, loggedIn }) => {
+  const {
     _id,
     company_name,
     title,
-    type,
-    skills,
-    salary,
     city,
     country,
     createdAt,
@@ -31,20 +29,20 @@ const JobCard = ({
     company_logo,
     description,
     category,
-  },
-  setFeaturedJobs,
-  loggedIn,
-}) => {
+  } = job;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showJobDetails, setShowJobDetails] = useState(false);
   const refreshData = () => {
     getApprovedJobs()
       .then(({ data }) => {
         dispatch(setJobs(data ?? []));
+        dispatch(setFilteredJobs(data ?? []));
       })
       .catch(() => {
         dispatch(setJobs([]));
+        dispatch(setFilteredJobs([]));
       });
     getFeaturedJobs()
       .then(({ data }) => {
@@ -89,60 +87,33 @@ const JobCard = ({
   };
   return (
     <Card className='job-card'>
-      {/* <Card.Header
-        className={`job-card-header ${
-          is_featured ? '' : 'non-'
-        }featured-header`}
-      >
-        <div>{title}</div>
-        <div className='d-flex align-items-center'>
-          {loggedIn === true && !is_featured && is_approved && (
-            <div
-              className='featured-text custom-button-inverted'
-              onClick={markFeatured}
-            >
-              Mark as Featured
-            </div>
-          )}
-          {loggedIn === true && !is_approved && (
-            <div
-              className='featured-text custom-button-inverted'
-              onClick={onApproveJob}
-            >
-              Approve
-            </div>
-          )}
-          {loggedIn === true && (
-            <>
-              <div onClick={selectJob}>
-                <span className='fas fa-pencil-alt' />
-              </div>
-              <div onClick={onDeleteJob}>
-                <span className='fas fa-trash-alt' />
-              </div>
-            </>
-          )}
-        </div>
-      </Card.Header> */}
       <Card.Body className='job-card-body'>
         <div className='d-flex justify-content-apart'>
-          <div className='d-flex justify-content-center align-items-center'>
-            <div>
-              <img
-                className='company-logo'
-                src={`${API_URL}/${company_logo}`}
-                defer
-                alt='logo'
-              />
+          {company_logo && (
+            <div
+              className={
+                'logo-div d-flex justify-content-center align-items-center'
+              }
+            >
+              <div>
+                <img
+                  className='company-logo'
+                  src={`${API_URL}/${company_logo}`}
+                  defer
+                  alt='logo'
+                />
+              </div>
             </div>
-            <div className='company-name'>{company_name}</div>
-          </div>
+          )}
 
-          <div>
+          <div
+            className={!company_logo ? 'first-child' : 'second-child-with-logo'}
+          >
             <div className='job-info'>
               <div>{title}</div>
             </div>
             <div className='middle-info d-flex align-items-center'>
+              <div className='middle-icons'>{company_name}</div>
               <div className='middle-icons'>
                 <i className='fa fa-briefcase' />
                 {category || 'Engineering'}
@@ -167,7 +138,19 @@ const JobCard = ({
             </div>
             <div className='description'>{description}</div>
           </div>
-          <div className='action-icons d-flex justify-content-apart'>
+          <div
+            className={`${
+              !company_logo ? 'second-child' : 'third-child-with-logo'
+            } action-icons d-flex justify-content-apart`}
+          >
+            <div
+              onClick={() => {
+                setSelectedJob(job);
+                setShowJobDetails(true);
+              }}
+            >
+              <span className='view-job-icon fas fa-eye fa-lg' />
+            </div>
             {is_approved ? (
               <i
                 className={`feature-icon fa${
@@ -196,6 +179,11 @@ const JobCard = ({
             )}
           </div>
         </div>
+        <JobDetails
+          job={selectedJob}
+          show={showJobDetails}
+          handleClose={() => setShowJobDetails(false)}
+        />
       </Card.Body>
     </Card>
   );
